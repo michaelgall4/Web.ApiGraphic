@@ -20,7 +20,34 @@ namespace Web.Api.Controllers
         [HttpGet(template: "{Id}")]
         public Product Get(int Id)
         {
-            return _productDataProvider.GetProductById(Id);
+            return _productDataProvider.GetById(Id);
+        }
+
+        [HttpPut(template: "Add")]
+        public void Add(Product product)
+        {
+            _productDataProvider.Add(product);
+        }
+
+        [HttpPost(template: "Edit")]
+        public void Edit(Product product)
+        {
+            _productDataProvider.Edit(product);
+        }
+
+        [HttpDelete(template: "Delete")]
+        public void Delete(int id)
+        {
+            _productDataProvider.Delete(id);
+        }
+
+        [HttpGet(template: "List")]
+        public IEnumerable<Product> GetList(int? number)
+        {
+            if (number == null)
+                return _productDataProvider.GetAll();
+
+            return _productDataProvider.GetMany(number.GetValueOrDefault());
         }
     }
 }
