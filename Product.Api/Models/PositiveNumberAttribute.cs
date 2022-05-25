@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Api.Models;
+namespace Product.Api.Models;
 
 public class PositiveNumberAttribute : ValidationAttribute
 {

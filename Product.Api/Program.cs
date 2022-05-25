@@ -1,4 +1,4 @@
-using Web.Api.SQL;
+using Product.Api.SQL;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,14 +1,14 @@
-﻿using Web.Api.Models;
+﻿using Product.Api.Models;
 
-namespace Web.Api.SQL
+namespace Product.Api.SQL
 {
     public interface IProductDataProvider
     {
-        public Product GetById(int id);
-        public void Add(Product product);
-        public void Edit(Product product);
+        public ProductDto GetById(int id);
+        public void Add(ProductDto product);
+        public void Edit(ProductDto product);
         public void Delete(int id);
-        public IEnumerable<Product> GetMany(int limit);
-        public IEnumerable<Product> GetAll();
+        public IEnumerable<ProductDto> GetMany(int limit);
+        public IEnumerable<ProductDto> GetAll();
     }
 }

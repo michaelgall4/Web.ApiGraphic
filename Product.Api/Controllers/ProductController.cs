@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using Web.Api.Models;
-using Web.Api.SQL;
+using Product.Api.Models;
+using Product.Api.SQL;
 
-namespace Web.Api.Controllers
+namespace Product.Api.Controllers
 {
     [ApiController]
     [Route(template: "Product")]
     public class ProductController : ControllerBase
     {
         private readonly ILogger<ProductController> _logger;
-        private IProductDataProvider _productDataProvider;
+        private readonly IProductDataProvider _productDataProvider;
 
         public ProductController(ILogger<ProductController> logger, IProductDataProvider productDataProvider)
         {
@@ -18,19 +18,19 @@ namespace Web.Api.Controllers
         }
 
         [HttpGet(template: "{Id}")]
-        public Product Get(int Id)
+        public ProductDto Get(int Id)
         {
             return _productDataProvider.GetById(Id);
         }
 
         [HttpPut(template: "Add")]
-        public void Add(Product product)
+        public void Add(ProductDto product)
         {
             _productDataProvider.Add(product);
         }
 
         [HttpPost(template: "Edit")]
-        public void Edit(Product product)
+        public void Edit(ProductDto product)
         {
             _productDataProvider.Edit(product);
         }
@@ -42,7 +42,7 @@ namespace Web.Api.Controllers
         }
 
         [HttpGet(template: "List")]
-        public IEnumerable<Product> GetList(int? number)
+        public IEnumerable<ProductDto> GetList(int? number)
         {
             if (number == null)
                 return _productDataProvider.GetAll();

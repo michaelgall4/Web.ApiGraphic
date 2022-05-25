@@ -1,16 +1,18 @@
-﻿using Web.Api.Models;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
+using Product.Api.Models;
 
-namespace Web.Api.SQL
+namespace Product.Api.SQL
 {
     public class ProductDataProvider : IProductDataProvider
     {
-        private string _connectionString;
+
+        private readonly string _connectionString;
         public ProductDataProvider(string connectionString)
         {
             _connectionString = connectionString;
         }
-        public Product GetById(int id)
+
+        public ProductDto GetById(int id)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -23,7 +25,7 @@ namespace Web.Api.SQL
             if (!reader.Read())
                 throw new Exception("No product found");
 
-            return new Product()
+            return new ProductDto
             {
                 Id = int.Parse(reader["ID"].ToString()),
                 Name = reader["Name"].ToString(),
@@ -33,7 +35,7 @@ namespace Web.Api.SQL
             };
         }
 
-        public void Add(Product product)
+        public void Add(ProductDto product)
         {
 
             using var connection = new SqlConnection(_connectionString);
@@ -49,7 +51,7 @@ namespace Web.Api.SQL
             command.ExecuteNonQuery();
         }
 
-        public void Edit(Product product)
+        public void Edit(ProductDto product)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -81,7 +83,7 @@ namespace Web.Api.SQL
             command.ExecuteNonQuery();
         }
 
-        public IEnumerable<Product> GetMany(int limit)
+        public IEnumerable<ProductDto> GetMany(int limit)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -96,7 +98,7 @@ namespace Web.Api.SQL
 
             while (reader.Read())
             {
-               yield return new Product()
+               yield return new ProductDto
                 {
                     Id = int.Parse(reader["ID"].ToString()),
                     Name = reader["Name"].ToString(),
@@ -107,7 +109,7 @@ namespace Web.Api.SQL
             }
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<ProductDto> GetAll()
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -118,7 +120,7 @@ namespace Web.Api.SQL
 
             while (reader.Read())
             {
-                yield return new Product()
+                yield return new ProductDto
                 {
                     Id = int.Parse(reader["ID"].ToString()),
                     Name = reader["Name"].ToString(),
