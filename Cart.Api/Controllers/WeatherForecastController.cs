@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Cart.Api.Models;
+using Cart.Api.SQL;
 
 namespace Cart.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route(template: "Cart")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -12,22 +14,34 @@ namespace Cart.Api.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ICartDataProvider _cartDataProvider;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,ICartDataProvider cartDataProvider)
         {
-            _logger = logger;
+            _cartDataProvider = cartDataProvider;
+           _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet(template: "{Id}")]
+        public CartDto Get(int Id)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return _cartDataProvider.GetById(Id);
+        }
+        [HttpPut(template: "Add")]
+        public void Add( CartDto cart)
+        {
+           if(_cartDataProvider.Check(cart))
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                _cartDataProvider.Update(cart);
+               
+            }
+            else
+            {
+                _cartDataProvider.Add(cart);
+            }
         }
+
+        
+
     }
 }
