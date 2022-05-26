@@ -8,7 +8,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IProductDataProvider, ProductDataProvider>(x => new ProductDataProvider(builder.Configuration.GetConnectionString("ProductConnectionString") ) );
+builder.Services
+    .AddSingleton<IProductDataProvider, ProductDataProvider>(_ => 
+        new ProductDataProvider(builder.Configuration.GetConnectionString("DbDocker") ) );
 
 var app = builder.Build();
 

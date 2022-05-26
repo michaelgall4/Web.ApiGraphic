@@ -1,0 +1,50 @@
+version: '3'
+services: 
+  web-app:
+    container_name: web-app
+    image: web-app:latest
+    build:
+      context: .
+      dockerfile: Web.App/Dockerfile
+    ports: 
+      - "80:80"
+    links:
+      - cart-api
+      - product-api
+      - sql-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ProductApiUrl=http:\\product-api
+      - CartApiUrl=http:\\cart-api
+  cart-api:
+    container_name: cart-api
+    image: cart-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    build:
+      context: .
+      dockerfile: Cart.Api/Dockerfile
+    ports: 
+      - "5656:80"
+    links: 
+      - sql-db
+  product-api:
+    container_name: product-api
+    image: product-api:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    build:
+      context: .
+      dockerfile: Product.Api/Dockerfile
+    ports: 
+      - "5657:80"
+    links: 
+      - sql-db
+  sql-db:
+    container_name: sql-sb
+    image: mcr.microsoft.com/mssql/server
+    environment: 
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=12345678Aa!
+    ports: 
+      - "9090:1433"

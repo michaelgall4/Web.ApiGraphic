@@ -42,6 +42,7 @@ namespace Product.Api.SQL
             connection.Open();
             var query = @"insert into Product ([Name],[Price],[Quantity],[Description])
                         values(@Name, @Price, @Quantity, @Description)";
+
             using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("Name", product.Name);
             command.Parameters.AddWithValue("Price", product.Price);
@@ -55,6 +56,7 @@ namespace Product.Api.SQL
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
+
             var query = @"UPDATE Product
                             SET Name = @Name,
                                 Price = @Price,
@@ -62,6 +64,7 @@ namespace Product.Api.SQL
                                 Description = @Description
                             WHERE Id = @Id";
             using var command = new SqlCommand(query, connection);
+
             command.Parameters.AddWithValue("Id", product.Id);
             command.Parameters.AddWithValue("Name", product.Name);
             command.Parameters.AddWithValue("Price", product.Price);
@@ -77,6 +80,7 @@ namespace Product.Api.SQL
             connection.Open();
             var query = @"DELETE FROM Product
                             WHERE Id = @Id;";
+
             using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("Id", id);
 
@@ -87,6 +91,7 @@ namespace Product.Api.SQL
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
+
             var query = "SELECT TOP (@limit) [Id], [Name], [Price], [Quantity], [Description] FROM Product; ";
             using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("limit", limit);
@@ -98,7 +103,7 @@ namespace Product.Api.SQL
 
             while (reader.Read())
             {
-               yield return new ProductDto
+                yield return new ProductDto
                 {
                     Id = int.Parse(reader["ID"].ToString()),
                     Name = reader["Name"].ToString(),
@@ -113,9 +118,10 @@ namespace Product.Api.SQL
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
-            var query = "SELECT [Id], [Name], [Price], [Quantity], [Description] FROM Product; ";
-            using var command = new SqlCommand(query, connection);
 
+            var query = "SELECT [Id], [Name], [Price], [Quantity], [Description] FROM Product;";
+
+            using var command = new SqlCommand(query, connection);
             using var reader = command.ExecuteReader();
 
             while (reader.Read())
