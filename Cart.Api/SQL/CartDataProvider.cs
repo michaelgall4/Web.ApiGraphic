@@ -63,7 +63,7 @@ namespace Cart.Api.SQLCart
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
-            var query = "SELECT [Id], [Name], [Price], [Quantity], [Description] FROM Product; ";
+            var query = "SELECT * FROM Cart";
             using var command = new SqlCommand(query, connection);
 
             using var reader = command.ExecuteReader();
@@ -72,18 +72,48 @@ namespace Cart.Api.SQLCart
             {
                 yield return new CartDto
                 {
-                    IdCart = int.Parse(reader["ID"].ToString()),
-                    UserId = int.Parse(reader["ID"].ToString()),
-                    ProductId = int.Parse(reader["ID"].ToString()),
-                    Quantity = int.Parse(reader["ID"].ToString())
+                    IdCart = int.Parse(reader["IdCart"].ToString()),
+                    UserId = int.Parse(reader["UserId"].ToString()),
+                    ProductId = int.Parse(reader["ProductId"].ToString()),
+                    Quantity = int.Parse(reader["Quantity"].ToString())
 
                 };
             }
         }
 
-        public CartDto GetById(int id)
+        public IEnumerable<CartDto> GetByUserId(int userId)
         {
-            throw new NotImplementedException();
+            CartDto cart = new CartDto();
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            var query = "SELECT * FROM Cart WHERE UserId = @UserId; ";
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("UserId", userId);
+
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                yield return new CartDto
+                {
+                    IdCart = int.Parse(reader["IdCart"].ToString()),
+                    UserId = int.Parse(reader["UserId"].ToString()),
+                    ProductId = int.Parse(reader["ProductId"].ToString()),
+                    Quantity = int.Parse(reader["Quantity"].ToString())
+                };
+            }
         }
+
+        public void Delete(int userId, int productId)
+        {
+            string query = " DELETE FROM Cart WHERE UserId = @UserId AND ProductId = @ProductId";
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            using var command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("ProductId", productId);
+            command.Parameters.AddWithValue("UserId", userId);
+            command.ExecuteNonQuery();
+        }
+
     }
 }

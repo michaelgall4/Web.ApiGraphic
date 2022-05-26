@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services
     .AddSingleton<ICartDataProvider, CartDataProvider>(_ => 
-        new CartDataProvider(builder.Configuration.GetConnectionString("DbDocker")));
+        new CartDataProvider(builder.Configuration.GetConnectionString("Db")));
 
 var app = builder.Build();
 
