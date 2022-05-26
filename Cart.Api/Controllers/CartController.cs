@@ -19,9 +19,9 @@ namespace Cart.Api.Controllers
         }
 
         [HttpGet(template: "{Id}")]
-        public CartDto Get(int Id)
+        public IEnumerable<CartDto> GetByUserId(int Id)
         {
-            return _cartDataProvider.GetById(Id);
+            return _cartDataProvider.GetByUserId(Id);
         }
 
         [HttpPut(template: "Add")]
@@ -31,6 +31,12 @@ namespace Cart.Api.Controllers
                 _cartDataProvider.Update(cart);
             else
                 _cartDataProvider.Add(cart);
+        }
+
+        [HttpDelete(template:"Delete/{userId}/{productId}")]
+        public void Delete(int userId, int productId)
+        {
+            _cartDataProvider.Delete(userId,productId);
         }
 
     }

@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services
     .AddSingleton<IProductDataProvider, ProductDataProvider>(_ => 
-        new ProductDataProvider(builder.Configuration.GetConnectionString("DbDocker") ) );
+        new ProductDataProvider(builder.Configuration.GetConnectionString("Db") ) );
 
 var app = builder.Build();
 
